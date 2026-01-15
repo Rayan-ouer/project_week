@@ -1,0 +1,19 @@
+    <div>
+      <TimelineComp data={filteredData} />
+      <div>
+      <WorldMap onCountryClick={handleCountryClick} data={country}/>
+	  {selectedCountry && (
+        <div className="SideMenu">
+          <div className="overlay" onClick={() => setSelectedCountry(null)}></div>
+          <div className="modal-content">
+            <Button onClick={() => setSelectedCountry(null)}></Button>
+            <Dashboard
+              data={data.filter(e => e.event?.primaryLocation === selectedCountry)}
+            />
+          </div>
+        </div>
+      )}
+      </div>
+      <div>
+      </div>
+    </div>

@@ -1,0 +1,28 @@
+
+.SideMenu {
+  position: fixed;
+  background-color: rgba(128, 128, 128, 0.5);
+  right: 1%;
+  bottom: 1%;
+  opacity: 10;
+  height: 80vh;
+  width: 37vw;
+  border-radius: 5%;
+  overflow-y: scroll;
+  border: 1px solid white ;
+  padding: 2%;
+}
+
+.closeButton {
+  position: absolute;
+  fill: white;
+  background: red;
+  opacity: 0.5;
+  color: white;
+  right: 20px;
+  top : 20px;
+}
+
+.closeButton:hover {
+  opacity: 1;
+}

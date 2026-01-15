@@ -1,0 +1,43 @@
+
+.timelineComp {
+  display: flex;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 15vh;
+  background-color: rgba(125, 125, 125, 0.3);
+}
+
+.cyberpeaceLogo {
+  height: 100%;
+  width: auto;
+  min-width: 350px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+
+.timelineScroll {
+  display: flex;
+  gap: 20px;
+  width: auto;
+  overflow-x: scroll;
+  align-items: center;
+  float: right;
+}
+
+.Scroller {
+  display: flex;
+  align-items: flex-start;
+  height: 90%;
+  min-width: 200px;
+  width: 14%;
+  background-color: darksalmon;
+  border-radius: 10%;
+  padding: 0;
+  overflow-y: scroll;
+}
+
+.Scroller:hover {
+  scale: 1.05;
+}
