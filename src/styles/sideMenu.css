@@ -13,14 +13,20 @@
   padding: 2%;
 }
 
-.closeButton {
+.buttonContainer {
   position: absolute;
-  fill: white;
+  right: 20px;
+  top : 20px;
+  height: 100%;
+}
+
+.closeButton {
+  position: sticky;
+  top: 0;
   background: red;
   opacity: 0.5;
   color: white;
-  right: 20px;
-  top : 20px;
+  z-index: 100;
 }
 
 .closeButton:hover {

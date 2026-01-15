@@ -10,7 +10,7 @@ import { getCountryISO3 } from '@/services/getCountryIS03'
 import { useFilteredEvents } from '@/services/FilterCountry';
 import { Button } from './ui/button';
 import { ArrowUpIcon, Ghost } from "lucide-react"
-
+import type { UserLocation } from '../model/CyberEvent';
 
 function convertISO2_to_ISO3(data: CyberEvent[]): void {
   data.forEach(event => {
@@ -44,6 +44,7 @@ export default function CyberEventsContainer() {
   const [data, setData] = useState<CyberEvent[]>([]);
   const [country, setCountries] = useState<CountryEvent[]>([])
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+  const [location, setLocation] = useState<UserLocation | null>(null);
   const filteredData = useFilteredEvents(data, selectedCountry);
 
   	useEffect(() => {
@@ -59,6 +60,18 @@ export default function CyberEventsContainer() {
     const grouped = getEventByCountry(data);
     setCountries(grouped as CountryEvent[]);
   }, [data]);
+
+   useEffect(() => {
+      fetch('http://ip-api.com/json/?fields=61439')
+        .then(response => response.json())
+        .then(res => {
+          setLocation({
+            lat: res.lat,
+            lon: res.lon,
+          });
+        })
+        .catch(err => console.log(err));
+    }, []);
   
   	const handleCountryClick = (countryCode: string | null) => {
 		if (!countryCode) {
@@ -76,11 +89,11 @@ export default function CyberEventsContainer() {
     <div>
       <TimelineComp data={filteredData} />
       <div>
-      <WorldMap onCountryClick={handleCountryClick} data={country}/>
+      <WorldMap onCountryClick={handleCountryClick} data={country} location={location} />
 	  {selectedCountry && (
         <div className="SideMenu">
           <div className="overlay" onClick={() => setSelectedCountry(null)}></div>
-            <div>
+            <div className='buttonContainer'>
             <Button className="closeButton" onClick={() => setSelectedCountry(null)}>
               X
               </Button>

@@ -56,3 +56,8 @@ export interface CountryEvent {
     country?: string;
     events?: CyberEvent[];
 }
+
+export type UserLocation = {
+    lat: number;
+    lon: number;
+};

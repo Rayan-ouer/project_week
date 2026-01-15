@@ -28,13 +28,10 @@
 
 .Scroller {
   display: flex;
-  align-items: flex-start;
   height: 90%;
   min-width: 200px;
   width: 14%;
-  background-color: darksalmon;
-  border-radius: 10%;
-  padding: 0;
+  background: rgb(30, 41, 59);
   overflow-y: scroll;
 }
 

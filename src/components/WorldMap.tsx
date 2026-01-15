@@ -1,9 +1,13 @@
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { geoMercator, geoPath } from 'd3-geo';
+import { zoom, zoomIdentity } from 'd3-zoom';
+import { select } from 'd3-selection';
 import type { CountryEvent, CyberEvent } from '../model/CyberEvent';
 import Dashboard from "./Dashboard";
 import worldData from '../../public/data/world.json';
-import { color } from 'd3';
+import { color, geoAlbersUsa } from 'd3';
+import { number } from 'astro:schema';
+import type { UserLocation } from '../model/CyberEvent';
 
 interface Feature {
     type: string;
@@ -28,9 +32,10 @@ interface TooltipState {
 type WorldMapProps = {
     onCountryClick: (countryCode: string | null) => void;
     data: CountryEvent[];
+    location: UserLocation | null;
 };
 
-const WorldMap = ({ onCountryClick, data }: WorldMapProps) => {
+const WorldMap = ({ onCountryClick, data, location }: WorldMapProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [tooltip, setTooltip] = useState<TooltipState>({
         visible: false,
@@ -39,15 +44,30 @@ const WorldMap = ({ onCountryClick, data }: WorldMapProps) => {
         name: '',
         code: '',
     });
+    const svgRef = useRef<SVGSVGElement | null>(null);
+    const gRef = useRef<SVGGElement | null>(null);
 
-    const { projection, pathGenerator, features } = useMemo(() => {
-        const width = 960;
-        const height = 500;
+    useEffect(() => {
+        if (!svgRef.current || !gRef.current)
+            return;
 
+        const svg = select(svgRef.current);
+        const g = select(gRef.current);
+        const zoomBehavior = zoom<SVGSVGElement, unknown>()
+            .scaleExtent([1, 5])
+            .translateExtent([[0, 0], [960, 500]])
+            .extent([[0, 0], [960, 500]])
+            .on('zoom', (event) => {
+                g.attr('transform', event.transform.toString());
+            });
+    svg.call(zoomBehavior);
+    }, []);
+
+    const { pathGenerator, features, projection } = useMemo(() => {
         const proj = geoMercator()
             .scale(150)
             .center([0, 20])
-            .translate([width / 2, height / 2]);
+            .translate([480, 250]);
 
         const path = geoPath().projection(proj);
         const feats = (worldData as { features: Feature[] }).features;
@@ -59,13 +79,19 @@ const WorldMap = ({ onCountryClick, data }: WorldMapProps) => {
         };
     }, []);
 
-    const handleMouseMove = useCallback((e: React.MouseEvent, feature: Feature) => {
+    const handleMouseMove = useCallback((e: React.MouseEvent, feature: Feature, data: CountryEvent[]) => {
+        const country = data.find(event => event.country === feature.id);
+        var eventCount : string = `Events : ${country?.events?.length}`
+
+        if (!country || !country.events || country.events.length <= 0)
+            eventCount = "No Event"
+
         setTooltip({
             visible: true,
             x: e.clientX,
             y: e.clientY,
             name: feature.properties.name,
-            code: feature.id || 'N/A',
+            code: eventCount || 'N/A',
         });
     }, []);
 
@@ -90,32 +116,49 @@ const WorldMap = ({ onCountryClick, data }: WorldMapProps) => {
     }
 
     return (
-        <div ref={containerRef} className="world-map-container">
+        <div ref={containerRef} className="world-map-container" id='world-map-container'>
             <svg
-                className="world-map-svg"
-                viewBox="0 0 960 500"
-                preserveAspectRatio="xMidYMid meet"
-            >
-                <g>
-                    {features.map((feature) => {
-                        const d = pathGenerator(feature as any);
-                        if (!d) return null;
-                        const fillColor = colorCountryByIncident(data, feature)
-                        return (
-                            <path
-                                key={feature.id || feature.properties.name}
-                                d={d}
-                                className="country-path"
-                                fill={fillColor}
-                                onMouseMove={(e) => handleMouseMove(e, feature)}
-                                onMouseLeave={handleMouseLeave}
-                                onClick={() => onCountryClick(feature.id)}
-                            />
-                        );
-                    })}
+                ref={svgRef}
+                 className="world-map-svg"
+                  id="world-map-svg"
+                  viewBox="0 0 960 500"
+                  preserveAspectRatio="xMidYMid meet">
+            <g ref={gRef}>
+              {features.map((feature) => {
+                const d = pathGenerator(feature as any);
+                if (!d) return null;
+                const fillColor = colorCountryByIncident(data, feature);
+
+                return (
+                    <path
+                       key={feature.id || feature.properties.name}
+                       d={d}
+                        className="country-path"
+                        fill={fillColor}
+                        onMouseMove={(e) => handleMouseMove(e, feature, data)}
+                        onMouseLeave={handleMouseLeave}
+                         onClick={() => onCountryClick(feature.id)}
+                         />
+                      );
+              })}
+
+          {location && (() => {
+               const coords = projection([location.lon, location.lat]);
+                if (!coords) return null;
+
+                return (
+                    <circle
+                    cx={coords[0]}
+                    cy={coords[1]}
+                    r={4}
+                    fill="green"
+                    stroke="white"
+                    strokeWidth={1.5}
+                     />
+                );
+                })()}
                 </g>
             </svg>
-
             <div
                 className={`country-tooltip ${tooltip.visible ? 'visible' : ''}`}
                 style={{

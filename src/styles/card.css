@@ -1,0 +1,31 @@
+
+.eventCard {
+    width: 100%; 
+    max-width: 24rem; 
+    padding: 2px;
+    overflow-x: scroll;
+    border-radius: 4%;
+}
+
+.cardHead {
+    align-self: center;
+    text-align: center;
+}
+
+.typeBar {
+    height: 17px;
+    width: auto;
+    color: white;
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    /* align-items: center; */
+}
+
+.cardTitle {
+    display: grid;
+    text-align: center;
+}
