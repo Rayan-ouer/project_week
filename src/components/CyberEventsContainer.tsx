@@ -68,7 +68,8 @@ export default function CyberEventsContainer() {
           });
         })
         .catch(err => console.log(err));
-    }, []);
+        console.log(location)
+  }, []);
   
   	const handleCountryClick = (countryCode: string | null) => {
 		if (!countryCode) {
