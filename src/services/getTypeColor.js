@@ -15,6 +15,5 @@ const typeColor = {
 
 
 export function findTypeColor (type) {
-  console.log(typeColor[type])
   return typeColor[type]
 }
