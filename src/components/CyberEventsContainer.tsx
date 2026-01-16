@@ -59,7 +59,7 @@ export default function CyberEventsContainer() {
   }, [data]);
 
    useEffect(() => {
-      fetch('http://ip-api.com/json/?fields=61439')
+      fetch('https://ip-api.com/json/?fields=61439')
         .then(response => response.json())
         .then(res => {
           setLocation({
