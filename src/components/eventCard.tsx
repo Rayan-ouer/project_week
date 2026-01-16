@@ -1,14 +1,5 @@
-import React from "react"
 import type { CyberEvent } from '@/model/CyberEvent'
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { getCountryName3 } from "@/services/getCountryName"
 import { findTypeColor } from "@/services/getTypeColor"

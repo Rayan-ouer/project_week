@@ -1,6 +1,5 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
 import { Bar, BarChart, LabelList, XAxis, YAxis, ResponsiveContainer } from "recharts"
 import type { CyberEvent } from "@/model/CyberEvent"
 import { useMemo } from "react"
@@ -8,15 +7,12 @@ import { useMemo } from "react"
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import {
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart"
 
@@ -52,7 +48,7 @@ export function ChartBarAttackImpact({ data }: { data: CyberEvent[] }) {
         });
         return Object.entries(map).map(([name, value]) => ({ name, value }));
     }, [data]);
-  
+
   return (
     <Card className="chartCard">
       <CardHeader className="text-center" >

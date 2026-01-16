@@ -1,15 +1,12 @@
 import { use, useEffect, useState } from 'react';
 import { fetchJSON } from '../services/FetchJSON';
 import type { CyberEvent, CountryEvent } from '../model/CyberEvent';
-import { ChartBarAttackType } from './TypeAttack';
 import { TimelineComp } from "@/components/Timeline";
-import { ModalButton } from "@/components/buttonCountry"
 import Dashboard from "./Dashboard";
 import WorldMap from './WorldMap';
 import { getCountryISO3 } from '@/services/getCountryIS03'
 import { useFilteredEvents } from '@/services/FilterCountry';
 import { Button } from './ui/button';
-import { ArrowUpIcon, Ghost } from "lucide-react"
 import type { UserLocation } from '../model/CyberEvent';
 
 function convertISO2_to_ISO3(data: CyberEvent[]): void {
@@ -84,11 +81,20 @@ export default function CyberEventsContainer() {
 			setSelectedCountry(countryCode);
 		}
 	};
+  const getCountryData = (countryCode : string | null)  => {
+    if (countryCode === "ALL"){
+      return data;
+    } 
+    return data.filter(e => e.event?.primaryLocation === countryCode)
+  }
 
   return (
     <div>
       <TimelineComp data={filteredData} />
       <div>
+          <Button className="allCountryButt" onClick={() => setSelectedCountry("ALL")}>
+            All Country
+          </Button>
       <WorldMap onCountryClick={handleCountryClick} data={country} location={location} />
 	  {selectedCountry && (
         <div className="SideMenu">
@@ -99,7 +105,7 @@ export default function CyberEventsContainer() {
               </Button>
             </div>
             <Dashboard
-              data={data.filter(e => e.event?.primaryLocation === selectedCountry)}
+              data={getCountryData(selectedCountry)}
             />
         </div>
       )}

@@ -30,11 +30,6 @@ export const TimelineComp = ({ data }: { data: CyberEvent[] }) => {
         {sorted.map((item, index) => (
           <div key={item.id ?? index} className="Scroller">
             <Card data={item}/>
-            {/* <p>
-              {item.event?.primaryLocation} : {item.event?.startDate}
-              <br />
-              <strong>{item.attack?.type}</strong> : {item.event?.name}
-            </p> */}
           </div>
         ))}
 

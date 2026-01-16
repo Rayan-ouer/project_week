@@ -6,7 +6,7 @@ export function useFilteredEvents(
   selectedCountry: string | null
 ) {
   return useMemo(() => {
-    if (!selectedCountry)
+    if (!selectedCountry || selectedCountry === "ALL")
         return data;
     return data.filter(e => e.event?.primaryLocation === selectedCountry);
   }, [data, selectedCountry]);

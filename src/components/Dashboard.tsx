@@ -1,6 +1,5 @@
 import { ChartBarAttackType } from './TypeAttack';
 import { ChartBarAttackImpact } from './ImpactAttack';
-import { TableAttack } from './TableAttack';
 import { ChartRadarSector } from './SectorAttack';
 import type { CyberEvent } from '../model/CyberEvent';
 

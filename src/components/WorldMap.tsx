@@ -1,12 +1,9 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { geoMercator, geoPath } from 'd3-geo';
-import { zoom, zoomIdentity } from 'd3-zoom';
+import { zoom } from 'd3-zoom';
 import { select } from 'd3-selection';
 import type { CountryEvent, CyberEvent } from '../model/CyberEvent';
-import Dashboard from "./Dashboard";
 import worldData from '../../public/data/world.json';
-import { color, geoAlbersUsa } from 'd3';
-import { number } from 'astro:schema';
 import type { UserLocation } from '../model/CyberEvent';
 
 interface Feature {
@@ -107,12 +104,12 @@ const WorldMap = ({ onCountryClick, data, location }: WorldMapProps) => {
         if (country.events.length < 5)
             return "rgba(144, 238, 144, 0.5)";
         if (country.events.length < 10)
-            return "rgba(50, 205, 50, 0.6)";
+            return "rgba(50, 205, 153, 0.6)";
         if (country.events.length < 20)
-            return "rgba(34, 139, 34, 0.1)";
+            return "rgba(30, 144, 255, 0.3)";
         if (country.events.length < 50)
-            return "rgba(30, 144, 255, 0.4)";
-        return "rgba(0, 0, 139, 0.4)";
+            return "rgba(34, 139, 34, 0.2)";
+        return "rgba(0, 0, 139, 0.3)";
     }
 
     return (
